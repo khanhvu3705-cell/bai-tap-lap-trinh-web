@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website 2 - Trang chủ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>WEBSITE 2</h1>
+        <p>Trang web thứ hai sử dụng Nginx và Docker</p>
+    </header>
+
+    <main>
+        <section class="content">
+            <h2>Chào mừng đến với Website 2!</h2>
+            <p>Đây là website thứ hai trong bài tập triển khai hệ thống web.</p>
+
+            <button onclick="showMessage()">Nhấn vào đây</button>
+            <p id="message"></p>
+
+            <hr>
+
+            <h2>Danh sách sinh viên</h2>
+            <button onclick="loadStudents()">Tải danh sách sinh viên</button>
+
+            <p id="apiMessage">Nhấn nút để tải dữ liệu từ Node-RED.</p>
+            <ul id="studentList"></ul>
+        </section>
+    </main>
+
+    <script>
+        function showMessage() {
+            document.getElementById("message").textContent =
+                "Website 2 đang hoạt động thành công!";
+        }
+
+        async function loadStudents() {
+            const apiMessage = document.getElementById("apiMessage");
+            const studentList = document.getElementById("studentList");
+
+            apiMessage.textContent = "Đang tải dữ liệu...";
+            studentList.innerHTML = "";
+
+            try {
+                const response = await fetch("/api/sinhvien");
+
+                if (!response.ok) {
+                    throw new Error("Lỗi kết nối API: " + response.status);
+                }
+
+                const data = await response.json();
+
+                apiMessage.textContent = data.msg;
+
+                data.dssv.forEach(function(student) {
+                    const item = document.createElement("li");
+                    item.textContent =
+                        student.masv + " - " + student.hoten;
+
+                    studentList.appendChild(item);
+                });
+
+            } catch (error) {
+                apiMessage.textContent =
+                    "Không thể tải dữ liệu: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

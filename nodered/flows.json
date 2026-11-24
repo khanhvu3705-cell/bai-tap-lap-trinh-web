@@ -1,0 +1,104 @@
+[
+    {
+        "id": "0014d501006bc3fb",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a2a87600c2afd3f6",
+        "type": "MySQLdatabase",
+        "name": "MariaDB",
+        "host": "mariadb",
+        "port": "3306",
+        "db": "baitap",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "4eb0d7253d640bbe",
+        "type": "http in",
+        "z": "0014d501006bc3fb",
+        "name": "API Sinh Vien",
+        "url": "/api/sinhvien",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 80,
+        "wires": [
+            [
+                "9bc0c34c7ecda395"
+            ]
+        ]
+    },
+    {
+        "id": "be63172a95895892",
+        "type": "http response",
+        "z": "0014d501006bc3fb",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 230,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "9bc0c34c7ecda395",
+        "type": "function",
+        "z": "0014d501006bc3fb",
+        "name": "Lay danh sach sinh vien",
+        "func": "msg.topic = \"SELECT masv, hoten FROM sinhvien\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 180,
+        "wires": [
+            [
+                "85416fa800c027b2"
+            ]
+        ]
+    },
+    {
+        "id": "6ef270e921730b16",
+        "type": "function",
+        "z": "0014d501006bc3fb",
+        "name": "Dinh dang JSON",
+        "func": "msg.payload = {\n    ok: true,\n    msg: \"Lay du lieu sinh vien tu MariaDB thanh cong!\",\n    dssv: msg.payload\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "be63172a95895892"
+            ]
+        ]
+    },
+    {
+        "id": "85416fa800c027b2",
+        "type": "mysql",
+        "z": "0014d501006bc3fb",
+        "d": true,
+        "mydb": "a2a87600c2afd3f6",
+        "name": "",
+        "x": 240,
+        "y": 280,
+        "wires": [
+            [
+                "6ef270e921730b16"
+            ]
+        ]
+    }
+]
